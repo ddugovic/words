@@ -1,2 +1,7 @@
 *.ali
 *.o
+makedict
+makeefil
+makeinfl
+makestem
+words

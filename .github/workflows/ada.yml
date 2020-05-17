@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-16.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Install dependencies
+    - name: Install Gnat
+      run: |
+        sudo apt install gcc-4.9
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gnat-4.9/libgnatprj4.9_4.9.3-3ubuntu5_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gnat-4.9/libgnatvsn4.9_4.9.3-3ubuntu5_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gnat-4.9/gnat-4.9-base_4.9.3-3ubuntu5_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gnat-4.9/libgnat-4.9_4.9.3-3ubuntu5_amd64.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/g/gnat-4.9/gnat-4.9_4.9.3-3ubuntu5_amd64.deb
+        sudo dpkg --install gnat-4.9-base_4.9.3-3ubuntu5_amd64.deb
+        sudo dpkg --install libgnat-4.9_4.9.3-3ubuntu5_amd64.deb
+        sudo dpkg --install libgnatvsn4.9_4.9.3-3ubuntu5_amd64.deb
+        sudo dpkg --install libgnatprj4.9_4.9.3-3ubuntu5_amd64.deb
+        sudo dpkg --install gnat-4.9_4.9.3-3ubuntu5_amd64.deb
+
+    # Runs a set of commands using the runners shell
+    - name: Produce executables for WORDS, MAKEDICT, MAKESTEM, MAKEEFIL, and MAKEINFL
+      run: |
+        gnatmake -O3 words
+        gnatmake makedict
+        gnatmake makestem
+        gnatmake makeefil
+        gnatmake makeinfl
